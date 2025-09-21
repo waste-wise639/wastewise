@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
 Route::post('register', [AuthController::class, 'register']);
