@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
 {
@@ -23,35 +24,54 @@ class AuthController extends Controller
 
         $user = User::create($userData);
 
-        $token = $user->createToken('auth-token')->plainTextToken;
-
-        return response([
+        return response()->json([
             'user' => $user,
-            'token' => $token
         ], 201);
 
     }
 
     // login
-    // public function login(LoginRequest $request) {
+   public function login(LoginRequest $request) 
+   {
+    $user = User::where('email', $request->email)->first(); 
 
-    //     $request->validated();
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'message' => 'Invalid credentials',
+        ], 422);
+    }
 
-    //     $user = User::whereUsername($request->username)->first();
+    $token = $user->createToken('auth-token')->plainTextToken;
 
-    //     if (!$user || !Hash::check($request->password, $user->password)) {
-    //         return response([
-    //             'message' => 'Invalid credentials',
-    //         ], 422);
-    //     }
+    return response()->json([
+        'user' => $user,
+        'token' => $token
+    ], 200);
+    }
 
-    //     $token = $user->createToken('forum-app-token')->plainTextToken;
+   public function user()
+   {
+    $user = auth()->user();
 
-    //     return response([
-    //         'user' => $user,
-    //         'token' => $token
-    //     ], 200);
+    if (!$user) {
+        return response()->json([
+            'message' => 'No user found',
+        ], 404);
+    }
 
-    // }
+    return response()->json([
+        'user' => $user,
+    ], 200);
+    }
+
+    public function logout(Request $request)
+    {
+    // $request->user()->currentAccessToken()->delete();
+     $request->user()->tokens()->delete();
+
+    return response()->json([
+        'message' => 'Logged out successfully',
+    ], 200);
+    }
 
 }
