@@ -8,11 +8,13 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    
-      public function register(RegisterRequest $request) {
+    //register
+    public function register(RegisterRequest $request) {
 
         $request->validated();
 
@@ -31,9 +33,9 @@ class AuthController extends Controller
     }
 
     // login
-   public function login(LoginRequest $request) 
-   {
-    $user = User::where('email', $request->email)->first(); 
+    public function login(LoginRequest $request) 
+    {
+     $user = User::where('email', $request->email)->first(); 
 
     if (!$user || !Hash::check($request->password, $user->password)) {
         return response()->json([
@@ -49,6 +51,7 @@ class AuthController extends Controller
     ], 200);
     }
 
+   //get user
    public function user()
    {
     $user = auth()->user();
@@ -64,6 +67,7 @@ class AuthController extends Controller
     ], 200);
     }
 
+    //logout
     public function logout(Request $request)
     {
     // $request->user()->currentAccessToken()->delete();
@@ -73,5 +77,59 @@ class AuthController extends Controller
         'message' => 'Logged out successfully',
     ], 200);
     }
+
+    // Send reset link
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return response()->json([
+                'message' => __($status),
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => __($status),
+        ], 400);
+    }
+
+     // Handle reset password
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token'    => 'required',
+            'email'    => 'required|email|exists:users,email',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->save();
+
+                // optional: delete all tokens so user is logged out everywhere
+                $user->tokens()->delete();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return response()->json([
+                'message' => __($status),
+            ], 200);
+        }
+
+        throw ValidationException::withMessages([
+            'email' => [__($status)],
+        ]);
+    }  
 
 }
