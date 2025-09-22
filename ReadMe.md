@@ -1,1 +1,2 @@
-## Wastewise API
+
+## WASTEWISE API
