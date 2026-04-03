@@ -3,26 +3,27 @@ FROM php:8.4-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git unzip curl libpq-dev zip \
-    && docker-php-ext-install pdo pdo_pgsql
-
-# Set working directory
-WORKDIR /var/www
-
-# Copy composer files first
-COPY composer.json composer.lock ./
+    git curl unzip libpq-dev libonig-dev libzip-dev zip \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+WORKDIR /var/www/html
 
 # Copy app files
 COPY . .
 
-# Expose port
-EXPOSE 8000
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# Run Laravel
-CMD php artisan serve --host=0.0.0.0 --port=8000
+# Laravel setup
+RUN php artisan config:clear && \
+    php artisan route:clear && \
+    php artisan view:clear
+
+# Expose Render’s dynamic port (Render sets $PORT, usually 10000)
+EXPOSE 10000
+
+# Start Laravel using built-in PHP server
+CMD php -S 0.0.0.0:$PORT -t public
