@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\LocationController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\WaitlistController;
 
 
 Route::post('register', [AuthController::class, 'register']);
@@ -22,3 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+//waitlist routes
+Route::post('/joinwaitlist', [WaitlistController::class, 'store'])->name('joinwaitlist');
+Route::get('/waitlist', [WaitlistController::class, 'index'])->name('waitlist.index');

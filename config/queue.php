@@ -43,6 +43,16 @@ return [
             'after_commit' => false,
         ],
 
+        // Custom connection for waitlist processing
+        'database_waitlist' => [
+    'driver' => 'database',
+    'table' => 'jobs',
+    'queue' => 'default',
+    'connection' => 'pgsql_waitlist', // <--- important
+    'retry_after' => 90,
+    'after_commit' => false,
+],
+
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => env('BEANSTALKD_QUEUE_HOST', 'localhost'),

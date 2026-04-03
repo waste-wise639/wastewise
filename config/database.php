@@ -98,6 +98,16 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'pgsql_waitlist' => [
+        'driver' => 'pgsql',
+        'host' => env('WAITLIST_DB_HOST'),
+        'port' => env('WAITLIST_DB_PORT', 5432),
+        'database' => env('WAITLIST_DB_DATABASE'),
+        'username' => env('WAITLIST_DB_USERNAME'),
+        'password' => env('WAITLIST_DB_PASSWORD'),
+        'sslmode' => env('WAITLIST_DB_SSLMODE'),
+    ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),
