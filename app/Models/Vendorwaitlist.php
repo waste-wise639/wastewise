@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Vendorwaitlist extends Model
+class VendorWaitlist extends Model
 {
 
   protected $connection = 'pgsql_waitlist';

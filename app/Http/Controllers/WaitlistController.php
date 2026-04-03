@@ -33,7 +33,7 @@ public function store(WaitlistRequest $request)
         }
 
         // ✅ Insert directly into the waitlist database
-        $vendor = Vendorwaitlist::create($WaitlistData);
+        $vendor = VendorWaitlist::create($WaitlistData);
 
         // ✅ Return JSON response
         return response()->json([
@@ -45,7 +45,7 @@ public function store(WaitlistRequest $request)
 
     public function index()
     {
-        $vendors = Vendorwaitlist::all();
+        $vendors = VendorWaitlist::all();
 
         return response()->json([
             'success' => true,
