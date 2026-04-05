@@ -22,23 +22,12 @@ class VendorWaitlist extends Model
         'registration_number',
         'number_of_trucks',
         'number_of_drivers',
-        'status'
+        'status',
+        // ✅ NEW
+        'registrant_name',
+        'registrant_email',
+        'registrant_phone',
+        'registrant_position',
     ];
-
-//     protected function prepareForValidation()
-// {
-//     if ($this->phone) {
-//         $phone = $this->phone;
-
-//         // Convert 080... → +23480...
-//         if (str_starts_with($phone, '0')) {
-//             $phone = '+234' . substr($phone, 1);
-//         }
-
-//         $this->merge([
-//             'phone' => $phone
-//         ]);
-//     }
-// }
- 
+    
 }

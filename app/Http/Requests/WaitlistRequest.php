@@ -41,6 +41,15 @@ class WaitlistRequest extends FormRequest
 
         'number_of_trucks' => ['nullable', 'integer', 'min:0'],
         'number_of_drivers' => ['nullable', 'integer', 'min:0'],
+
+         // ✅ NEW FIELDS
+        'registrant_name' => ['required', 'string', 'max:255'],
+        'registrant_email' => ['required', 'email', 'max:255'],
+        'registrant_phone' => [
+            'required',
+            'regex:/^(?:\+234|0)[789][01]\d{8}$/'
+        ],
+        'registrant_position' => ['nullable', 'string', 'max:255'], // we'll default this
     ];
     }
 }
