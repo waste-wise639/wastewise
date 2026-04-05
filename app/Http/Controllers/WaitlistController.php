@@ -36,12 +36,12 @@ public function store(WaitlistRequest $request)
         'message' => 'Vendor added to the waitlist successfully.',
         'vendor'  => $vendor
     ], 201);
-    
+
     }
 
     public function index()
     {
-        $vendors = VendorWaitlist::all();
+        $vendors = VendorWaitlist::orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'success' => true,
