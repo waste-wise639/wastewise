@@ -45,7 +45,7 @@ public function store(WaitlistRequest $request)
 //         <p>We’ll notify you when we launch 🚀</p>
 //     ",
 // ]);
-Mail::to($vendor->email)->send(new WaitlistWelcomeMail($vendor));
+Mail::to($vendor->email)->queue(new WaitlistWelcomeMail($vendor));
 
     return response()->json([
         'success' => true,
