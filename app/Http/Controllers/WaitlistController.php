@@ -7,6 +7,8 @@ use App\Http\Requests\WaitlistRequest;
 use App\Models\VendorWaitlist;
 use App\Jobs\ProcessWaitlistSubmission;
 use Resend\Laravel\Facades\Resend;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WaitlistWelcomeMail;
 
 
 class WaitlistController extends Controller
@@ -33,16 +35,17 @@ public function store(WaitlistRequest $request)
     $vendor = VendorWaitlist::create($data);
 
     // ✅ Send email
-Resend::emails()->send([
-    'from' => 'WasteWise Inc <team@danjicservices.com>',
-    'to' => [$vendor->email],
-    'subject' => 'You’re on the waitlist 🎉',
-    'html' => "
-        <h2>Hi {$vendor->registrant_name},</h2>
-        <p>Thanks for joining our vendor waitlist.</p>
-        <p>We’ll notify you when we launch 🚀</p>
-    ",
-]);
+// Resend::emails()->send([
+//     'from' => 'WasteWise Inc <team@danjicservices.com>',
+//     'to' => [$vendor->email],
+//     'subject' => 'You’re on the waitlist 🎉',
+//     'html' => "
+//         <h2>Hi {$vendor->registrant_name},</h2>
+//         <p>Thanks for joining our vendor waitlist.</p>
+//         <p>We’ll notify you when we launch 🚀</p>
+//     ",
+// ]);
+Mail::to($vendor->email)->queue(new WaitlistWelcomeMail($vendor));
 
     return response()->json([
         'success' => true,

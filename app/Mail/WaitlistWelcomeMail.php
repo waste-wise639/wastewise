@@ -9,18 +9,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewWaitlistEntry extends Mailable
+class WaitlistWelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
-
-     public $data;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($data)
+    public $vendor;
+
+    public function __construct($vendor)
     {
-        $this->data = $data;
+        $this->vendor = $vendor;
     }
 
     /**
@@ -29,7 +29,8 @@ class NewWaitlistEntry extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Waitlist Entry',
+           from: 'WasteWise Inc <team@danjicservices.com>',
+            subject: 'Welcome to WasteWise Vendor Waitlist',
         );
     }
 
@@ -39,7 +40,10 @@ class NewWaitlistEntry extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.waitlist-welcome',
+            with: [
+                'vendor' => $this->vendor,
+            ],
         );
     }
 
