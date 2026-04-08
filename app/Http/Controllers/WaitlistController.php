@@ -34,11 +34,11 @@ public function store(WaitlistRequest $request)
 
     // ✅ Send email
 Resend::emails()->send([
-    'from' => 'WasteWise Inc <onboarding@wastewise.com>',
+    'from' => 'WasteWise Inc <team@danjicservices.com>',
     'to' => [$vendor->email],
     'subject' => 'You’re on the waitlist 🎉',
     'html' => "
-        <h2>Hi {$vendor->name},</h2>
+        <h2>Hi {$vendor->registrant_name},</h2>
         <p>Thanks for joining our vendor waitlist.</p>
         <p>We’ll notify you when we launch 🚀</p>
     ",
