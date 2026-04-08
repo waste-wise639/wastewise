@@ -23,6 +23,11 @@ return new class extends Migration
             $table->unsignedInteger('number_of_trucks')->default(0);
             $table->unsignedInteger('number_of_drivers')->default(0);
             $table->enum('status', ['pilot_phase', 'active', 'inactive'])->default('pilot_phase');
+             //registrant details
+            $table->string('registrant_name')->after('company_name');
+            $table->string('registrant_email')->after('email');
+            $table->string('registrant_phone')->after('phone');
+            $table->string('registrant_position')->after('registrant_phone');
             $table->timestamps();
         });
     }
