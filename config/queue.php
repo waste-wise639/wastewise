@@ -44,11 +44,11 @@ return [
         ],
 
         // Custom connection for waitlist processing
-        'database_waitlist' => [
+       'database_waitlist' => [
     'driver' => 'database',
     'table' => 'jobs',
     'queue' => 'default',
-    'connection' => 'pgsql_waitlist', // <--- important
+    'connection' => 'pgsql_waitlist', // important
     'retry_after' => 90,
     'after_commit' => false,
 ],

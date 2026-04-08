@@ -35,7 +35,7 @@ public function store(WaitlistRequest $request)
     $vendor = VendorWaitlist::create($data);
 
     // ✅ Send email
-    Mail::to($vendor->email)->send(new WaitlistWelcomeMail($vendor));
+    Mail::to($vendor->email)->queue(new WaitlistWelcomeMail($vendor));
 
 
     return response()->json([
