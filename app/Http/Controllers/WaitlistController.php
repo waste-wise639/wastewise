@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\WaitlistRequest;
 use App\Models\VendorWaitlist;
 use App\Jobs\ProcessWaitlistSubmission;
+use Resend\Laravel\Facades\Resend;
 
 
 class WaitlistController extends Controller
@@ -13,7 +14,7 @@ class WaitlistController extends Controller
 
 public function store(WaitlistRequest $request)
     {
-        $data = $request->validated();
+       $data = $request->validated();
 
     // ✅ Format company phone
     if (str_starts_with($data['phone'], '0')) {
@@ -30,6 +31,18 @@ public function store(WaitlistRequest $request)
 
     // ✅ Save
     $vendor = VendorWaitlist::create($data);
+
+    // ✅ Send email
+Resend::emails()->send([
+    'from' => 'WasteWise Inc <onboarding@wastewise.com>',
+    'to' => [$vendor->email],
+    'subject' => 'You’re on the waitlist 🎉',
+    'html' => "
+        <h2>Hi {$vendor->name},</h2>
+        <p>Thanks for joining our vendor waitlist.</p>
+        <p>We’ll notify you when we launch 🚀</p>
+    ",
+]);
 
     return response()->json([
         'success' => true,
