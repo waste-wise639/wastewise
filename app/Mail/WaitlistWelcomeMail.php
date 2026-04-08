@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
 
-class WaitlistWelcomeMail extends Mailable
+class WaitlistWelcomeMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -22,6 +22,9 @@ class WaitlistWelcomeMail extends Mailable
     public function __construct($vendor)
     {
         $this->vendor = $vendor;
+        // Send email via your waitlist DB queue connection
+        $this->onConnection('database_waitlist');
+        $this->onQueue('default');
     }
 
     /**
