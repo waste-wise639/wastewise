@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
 
 class WaitlistWelcomeMail extends Mailable
 {
@@ -29,9 +30,8 @@ class WaitlistWelcomeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-           from: 'WasteWise Inc <team@danjicservices.com>',
-            subject: 'Welcome to WasteWise Vendor Waitlist',
-        );
+        subject: 'Welcome to WasteWise Vendor Waitlist',
+    );
     }
 
     /**
