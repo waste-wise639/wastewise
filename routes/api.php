@@ -27,3 +27,33 @@ Route::middleware('auth:sanctum')->group(function () {
 //waitlist routes
 Route::post('/joinwaitlist', [WaitlistController::class, 'store'])->name('joinwaitlist');
 Route::get('/waitlist', [WaitlistController::class, 'index'])->name('waitlist.index');
+
+// Add to routes/api.php
+Route::get('/test-cloudinary', function() {
+    try {
+        // Check if env variables are loading
+        $cloudUrl = env('CLOUDINARY_URL');
+        $cloudName = env('CLOUDINARY_CLOUD_NAME');
+        $apiKey = env('CLOUDINARY_API_KEY');
+        
+        \Log::info('Cloudinary Config Check', [
+            'cloud_url_exists' => !empty($cloudUrl),
+            'cloud_name' => $cloudName,
+            'api_key_exists' => !empty($apiKey),
+        ]);
+        
+        // Try to initialize Cloudinary
+        $config = config('cloudinary');
+        
+        return response()->json([
+            'config_loaded' => true,
+            'cloud_url_configured' => !empty($config['cloud_url']),
+            'cloud_name_from_env' => $cloudName,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'line' => $e->getLine(),
+        ], 500);
+    }
+});
