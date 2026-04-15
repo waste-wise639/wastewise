@@ -39,6 +39,7 @@ class WaitlistController extends Controller
             )->getSecurePath();
         }
 
+
         // ========================
         // LOGIC FIXES
         // ========================
