@@ -12,10 +12,14 @@ class WaitlistRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
-    {
-       return [
-        'company_name' => ['required', 'string', 'max:255'],
+   public function rules(): array
+{
+    return [
+
+        // ========================
+        // PERSONAL INFO
+        // ========================
+        'fullname' => ['required', 'string', 'max:255'],
 
         'email' => [
             'required',
@@ -28,28 +32,75 @@ class WaitlistRequest extends FormRequest
             'regex:/^(?:\+234|0)[789][01]\d{8}$/'
         ],
 
-        'operational_state' => ['required', 'string', 'max:255'],
-        'operational_city' => ['required', 'string', 'max:255'],
+        'business_name' => ['required', 'string', 'max:255'],
+        'business_type' => ['required', 'string', 'max:255'],
 
-        'office_address' => ['required', 'string'],
+        'country' => ['required', 'string'],
+        'state' => ['required', 'string'],
+        'lga' => ['required', 'string'],
 
-        'registration_number' => [
-            'required',
+        'referral_code' => ['nullable', 'string'],
+
+
+        // ========================
+        // BUSINESS DETAILS
+        // ========================
+        'business_reg_status' => ['required', 'string'],
+
+        'cac_number' => [
+            'nullable',
             'string',
-            Rule::unique('pgsql_waitlist.vendors_waitlist', 'registration_number'),
+            Rule::unique('pgsql_waitlist.vendors_waitlist', 'cac_number'),
         ],
 
-        'number_of_trucks' => ['nullable', 'integer', 'min:0'],
-        'number_of_drivers' => ['nullable', 'integer', 'min:0'],
+        'years_of_experience' => ['required', 'integer', 'min:0'],
 
-         // ✅ NEW FIELDS
-        'registrant_name' => ['required', 'string', 'max:255'],
-        'registrant_email' => ['required', 'email', 'max:255'],
-        'registrant_phone' => [
+        'number_of_drivers' => ['required', 'integer', 'min:0'],
+
+        'operation_coverage_area' => ['required', 'string'],
+
+        // FILES
+        'id_avatar' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
+        'business_upload_doc' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
+
+
+        // ========================
+        // OPERATIONS
+        // ========================
+        'type_of_waste' => ['required', 'array'],
+        'type_of_waste.*' => [
+            Rule::in(['solid', 'liquid', 'recyclable', 'hazardous', 'e-waste', 'organic'])
+        ],
+
+        'collection_vehicle' => ['required', 'boolean'],
+
+        'number_of_collection_vehicle' => ['nullable', 'integer', 'min:0'],
+
+        'capacity' => [
             'required',
-            'regex:/^(?:\+234|0)[789][01]\d{8}$/'
+            Rule::in(['daily', 'weekly', 'monthly'])
         ],
-        'registrant_position' => ['nullable', 'string', 'max:255'], // we'll default this
+
+        'availability' => [
+            'required',
+            Rule::in(['full-time', 'part-time'])
+        ],
+
+
+        // ========================
+        // BANKING
+        // ========================
+        'bank_name' => ['required', 'string'],
+        'account_number' => ['required', 'string'],
+        'account_name' => ['required', 'string'],
+
+        'preferred_payment_mode' => ['required', 'string'],
+
+
+        // ========================
+        // AGREEMENT
+        // ========================
+        'agree_to_terms_and_conditions' => ['required', 'accepted'],
     ];
-    }
+}
 }

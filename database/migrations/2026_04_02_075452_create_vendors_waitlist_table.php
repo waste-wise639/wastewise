@@ -6,37 +6,80 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('vendors_waitlist', function (Blueprint $table) {
+
             $table->id();
-            $table->string('company_name');
+
+            // ========================
+            // PERSONAL INFO
+            // ========================
+            $table->string('fullname');
             $table->string('email')->unique();
             $table->string('phone');
-            $table->string('operational_state');
-            $table->string('operational_city');
-            $table->text('office_address');
-            $table->string('registration_number')->unique();
-            $table->unsignedInteger('number_of_trucks')->default(0);
-            $table->unsignedInteger('number_of_drivers')->default(0);
-            $table->enum('status', ['pilot_phase', 'active', 'inactive'])->default('pilot_phase');
-             //registrant details
-            $table->string('registrant_name')->after('company_name');
-            $table->string('registrant_email')->after('email');
-            $table->string('registrant_phone')->after('phone');
-            $table->string('registrant_position')->after('registrant_phone');
+
+            $table->string('business_name');
+            $table->string('business_type');
+
+            $table->string('country');
+            $table->string('state');
+            $table->string('lga');
+
+            $table->string('referral_code')->nullable();
+
+            // ========================
+            // BUSINESS DETAILS
+            // ========================
+            $table->string('business_reg_status');
+            $table->string('cac_number')->nullable()->unique();
+
+            $table->integer('years_of_experience');
+            $table->integer('number_of_drivers');
+
+            $table->text('operation_coverage_area');
+
+            // FILES
+            $table->string('id_avatar')->nullable();
+            $table->string('business_upload_doc')->nullable();
+
+            // ========================
+            // OPERATIONS
+            // ========================
+            $table->json('type_of_waste');
+
+            $table->boolean('collection_vehicle');
+            $table->integer('number_of_collection_vehicle')->default(0);
+
+            $table->enum('capacity', ['daily', 'weekly', 'monthly']);
+            $table->enum('availability', ['full-time', 'part-time']);
+
+            // ========================
+            // BANKING
+            // ========================
+            $table->string('bank_name');
+            $table->string('account_number');
+            $table->string('account_name');
+
+            $table->string('preferred_payment_mode');
+
+            // ========================
+            // AGREEMENT
+            // ========================
+            $table->boolean('agree_to_terms_and_conditions');
+
+            // ========================
+            // STATUS
+            // ========================
+            $table->enum('status', ['pending', 'approved', 'rejected'])
+                  ->default('pending');
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('vendors_waitlist');
+        Schema::connection('pgsql_waitlist')->dropIfExists('vendors_waitlist');
     }
 };
