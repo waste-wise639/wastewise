@@ -69,7 +69,6 @@ class VendorWaitlist extends Model
     // CASTS (VERY IMPORTANT)
     // ========================
     protected $casts = [
-        'type_of_waste' => 'array', // auto JSON encode/decode
         'collection_vehicle' => 'boolean',
         'agree_to_terms_and_conditions' => 'boolean',
         'years_of_experience' => 'integer',

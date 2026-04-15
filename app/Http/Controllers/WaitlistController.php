@@ -40,13 +40,6 @@ class WaitlistController extends Controller
         }
 
         // ========================
-        // HANDLE ARRAYS
-        // ========================
-        if (isset($data['type_of_waste'])) {
-            $data['type_of_waste'] = json_encode($data['type_of_waste']);
-        }
-
-        // ========================
         // LOGIC FIXES
         // ========================
         if (!$data['collection_vehicle']) {

@@ -67,9 +67,9 @@ class WaitlistRequest extends FormRequest
         // ========================
         // OPERATIONS
         // ========================
-        'type_of_waste' => ['required', 'array'],
-        'type_of_waste.*' => [
-            Rule::in(['solid', 'liquid', 'recyclable', 'hazardous', 'e-waste', 'organic'])
+        'type_of_waste' => [
+         'required',
+         Rule::in(['solid', 'liquid', 'recyclable', 'hazardous', 'e-waste', 'organic'])
         ],
 
         'collection_vehicle' => ['required', 'boolean'],

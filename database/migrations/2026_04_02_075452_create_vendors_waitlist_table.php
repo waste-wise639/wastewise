@@ -46,7 +46,7 @@ return new class extends Migration
             // ========================
             // OPERATIONS
             // ========================
-            $table->json('type_of_waste');
+            $table->string('type_of_waste');
 
             $table->boolean('collection_vehicle');
             $table->integer('number_of_collection_vehicle')->default(0);
